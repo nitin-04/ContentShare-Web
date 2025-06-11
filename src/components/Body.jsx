@@ -34,6 +34,8 @@ const ContentUploader = () => {
           "Content-Type": "multipart/form-data",
         },
       });
+      console.log("Upload successful:", res.data);
+
       //   setShareLink(`http://localhost:5173/view/${res.data.id}`);
       setShareLink(`https://content-share-web.vercel.app/view/${res.data.id}`);
       setError(null);
