@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Link } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 import {
   FaFilePdf,
@@ -144,12 +143,23 @@ const ContentUploader = () => {
         {shareLink && (
           <div className="mt-6 p-4 bg-gray-700/50 rounded-xl">
             <p className="text-gray-300 mb-2">Share this link:</p>
-            <Link
-              to={shareLink}
-              className="text-blue-400 hover:text-blue-300 underline break-all"
-            >
-              {shareLink}
-            </Link>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                value={shareLink}
+                readOnly
+                className="flex-1 bg-gray-800 text-blue-400 p-2 rounded-lg border border-gray-600"
+              />
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(shareLink);
+                  alert("Link copied to clipboard!");
+                }}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition duration-200"
+              >
+                Copy
+              </button>
+            </div>
           </div>
         )}
 

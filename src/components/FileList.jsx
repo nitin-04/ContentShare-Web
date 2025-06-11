@@ -15,7 +15,7 @@ const getFileIcon = (fileType) => {
 const FileList = ({ onContentClick }) => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [copiedId, setCopiedId] = useState(null);
+    const [copiedStates, setCopiedStates] = useState({});
 
     const fetchFiles = async () => {
         try {
@@ -34,8 +34,16 @@ const FileList = ({ onContentClick }) => {
 
     const handleShare = (fileUrl, fileId) => {
         navigator.clipboard.writeText(fileUrl);
-        setCopiedId(fileId);
-        setTimeout(() => setCopiedId(null), 2000);
+        setCopiedStates(prev => ({
+            ...prev,
+            [fileId]: true
+        }));
+        setTimeout(() => {
+            setCopiedStates(prev => ({
+                ...prev,
+                [fileId]: false
+            }));
+        }, 2000);
     };
 
     if (isLoading) {
@@ -64,7 +72,7 @@ const FileList = ({ onContentClick }) => {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {uploadedFiles.map((file) => (
                             <div
-                                key={file.id}
+                                key={file._id}
                                 className="group bg-gray-800/50 backdrop-blur-lg p-6 rounded-2xl border border-gray-700/50 hover:border-blue-500/50 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10"
                             >
                                 <div className="flex flex-col items-center">
@@ -93,11 +101,11 @@ const FileList = ({ onContentClick }) => {
                                         </a>
 
                                         <button
-                                            onClick={() => handleShare(`${file.url}`, file.id)}
+                                            onClick={() => handleShare(`${file.url}`, file._id)}
                                             className="flex-1 flex items-center justify-center gap-2 bg-green-500/10 text-green-400 px-4 py-2 rounded-lg hover:bg-green-500/20 transition duration-200"
                                         >
                                             <FaCopy />
-                                            {copiedId === file.id ? 'Copied!' : 'Share'}
+                                            {copiedStates[file._id] ? 'Copied!' : 'Share'}
                                         </button>
                                     </div>
                                 </div>
